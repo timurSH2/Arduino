@@ -10,12 +10,12 @@
 #define SPRITE_JUMP 3
 #define SPRITE_JUMP_UPPER '.'         
 #define SPRITE_JUMP_LOWER 4
-#define SPRITE_TERRAIN_EMPTY ' '      
+#define SPRITE_TERRAIN_EMPTY ' '   
 #define SPRITE_TERRAIN_SOLID 5
 #define SPRITE_TERRAIN_SOLID_RIGHT 6
 #define SPRITE_TERRAIN_SOLID_LEFT 7
 
-#define HERO_HORIZONTAL_POSITION 1    
+#define HERO_HORIZONTAL_POSITION 1   
 
 #define TERRAIN_WIDTH 16
 #define TERRAIN_EMPTY 0
@@ -24,14 +24,14 @@
 
 #define HERO_POSITION_OFF 0          
 #define HERO_POSITION_RUN_LOWER_1 1  
-#define HERO_POSITION_RUN_LOWER_2 2  
+#define HERO_POSITION_RUN_LOWER_2 2                              
 
-#define HERO_POSITION_JUMP_1 3       
-#define HERO_POSITION_JUMP_2 4       
+#define HERO_POSITION_JUMP_1 3      
+#define HERO_POSITION_JUMP_2 4      
 #define HERO_POSITION_JUMP_3 5       
 #define HERO_POSITION_JUMP_4 6       
 #define HERO_POSITION_JUMP_5 7       
-#define HERO_POSITION_JUMP_6 8       
+#define HERO_POSITION_JUMP_6 8      
 #define HERO_POSITION_JUMP_7 9       
 #define HERO_POSITION_JUMP_8 10      
 
@@ -45,7 +45,7 @@ static bool buttonPushed = false;
 
 void initializeGraphics(){
   static byte graphics[] = {
-   
+    // Run position 1
     B01100,
     B01100,
     B00000,
@@ -54,7 +54,7 @@ void initializeGraphics(){
     B01100,
     B11010,
     B10011,
-   
+    // Run position 2
     B01100,
     B01100,
     B00000,
@@ -63,7 +63,7 @@ void initializeGraphics(){
     B01100,
     B01100,
     B01110,
-   
+    // Jump
     B01100,
     B01100,
     B00000,
@@ -72,7 +72,7 @@ void initializeGraphics(){
     B11111,
     B10000,
     B00000,
-   
+    
     B11110,
     B01101,
     B11111,
@@ -81,7 +81,7 @@ void initializeGraphics(){
     B00000,
     B00000,
     B00000,
-    
+   
     B11111,
     B11111,
     B11111,
@@ -99,6 +99,7 @@ void initializeGraphics(){
     B00011,
     B00011,
     B00011,
+    
     B11000,
     B11000,
     B11000,
@@ -109,7 +110,7 @@ void initializeGraphics(){
     B11000,
   };
   int i;
-  
+ 
   for (i = 0; i < 7; ++i) {
 	  lcd.createChar(i + 1, &graphics[i * 8]);
   }
@@ -118,6 +119,7 @@ void initializeGraphics(){
     terrainLower[i] = SPRITE_TERRAIN_EMPTY;
   }
 }
+
 
 void advanceTerrain(char* terrain, byte newTerrain){
   for (int i = 0; i < TERRAIN_WIDTH; ++i) {
@@ -193,7 +195,7 @@ bool drawHero(byte position, char* terrainUpper, char* terrainLower, unsigned in
   }
   
   byte digits = (score > 9999) ? 5 : (score > 999) ? 4 : (score > 99) ? 3 : (score > 9) ? 2 : 1;
- 
+  
   terrainUpper[TERRAIN_WIDTH] = '\0';
   terrainLower[TERRAIN_WIDTH] = '\0';
   char temp = terrainUpper[16-digits];
@@ -211,6 +213,8 @@ bool drawHero(byte position, char* terrainUpper, char* terrainLower, unsigned in
   terrainLower[HERO_HORIZONTAL_POSITION] = lowerSave;
   return collide;
 }
+
+
 void buttonPush() {
   buttonPushed = true;
 }
@@ -224,6 +228,7 @@ void setup(){
   digitalWrite(PIN_BUTTON, HIGH);
   pinMode(PIN_AUTOPLAY, OUTPUT);
   digitalWrite(PIN_AUTOPLAY, HIGH);
+  
   
   attachInterrupt(0/*PIN_BUTTON*/, buttonPush, FALLING);
   
@@ -258,8 +263,10 @@ void loop(){
     return;
   }
 
+ 
   advanceTerrain(terrainLower, newTerrainType == TERRAIN_LOWER_BLOCK ? SPRITE_TERRAIN_SOLID : SPRITE_TERRAIN_EMPTY);
   advanceTerrain(terrainUpper, newTerrainType == TERRAIN_UPPER_BLOCK ? SPRITE_TERRAIN_SOLID : SPRITE_TERRAIN_EMPTY);
+  
   
   if (--newTerrainDuration == 0) {
     if (newTerrainType == TERRAIN_EMPTY) {
@@ -277,7 +284,7 @@ void loop(){
   }  
 
   if (drawHero(heroPos, terrainUpper, terrainLower, distance >> 3)) {
-    playing = false; 
+    playing = false;
   } else {
     if (heroPos == HERO_POSITION_RUN_LOWER_2 || heroPos == HERO_POSITION_JUMP_8) {
       heroPos = HERO_POSITION_RUN_LOWER_1;
