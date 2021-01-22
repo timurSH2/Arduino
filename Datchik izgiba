@@ -1,0 +1,21 @@
+#include <Servo.h>
+Servo servo1;
+int flexpin = A0;
+void setup() 
+{ Serial.begin(9600); 
+  servo1.attach(9, 500, 2500); 
+} 
+void loop() 
+{ 
+  int flexval;
+  int servopos;
+ flexval= analogRead(flexpin); 
+  
+  Serial.print("Valore sensore: ");
+  Serial.println(flexval);
+  servopos = map(flexval, 767, 895, 0, 180); 
+  servopos = constrain(servopos, 0, 180); 
+  
+  servo1.write(servopos);
+  delay(20);
+}
