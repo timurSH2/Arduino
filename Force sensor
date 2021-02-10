@@ -1,0 +1,12 @@
+void setup()
+{
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  float val =  analogRead(A0);
+  float newton =0.00005*val*val - 0.0033*val+0.2162;
+  Serial.println(newton);
+  delay(100);
+}
